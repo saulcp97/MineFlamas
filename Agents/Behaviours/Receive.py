@@ -20,10 +20,10 @@ class ReceiveState(State):
             if self.agent.max_order < neighbour_max_order:
                 self.agent.max_order = neighbour_max_order
 
-            unpickled_local_weights = pickle.loads(codecs.decode(self.agent.weights.encode(), "base64"))
+            #unpickled_local_weights = pickle.loads(codecs.decode(self.agent.weights), "base64"))
 
             # Apply consensus and update model
-            consensus_weights = apply_consensus(unpickled_local_weights, unpickled_neighbour_weights, 1 / self.agent.max_order)
+            consensus_weights = apply_consensus(self.agent.weights, unpickled_neighbour_weights, 1 / self.agent.max_order)
 
             #self.agent.weight_logger.write_to_file(
             #    "CONSENSUS,{},{},{},{}".format(consensus_weights[0]['layer_input.weight'].numpy().flatten()[0],
@@ -32,9 +32,9 @@ class ReceiveState(State):
             #                                   consensus_weights[0]['layer_hidden.bias'].numpy().flatten()[0]))
 
             # Update agent properties
-            self.agent.weights = codecs.encode(pickle.dumps(consensus_weights), "base64").decode()
+            self.agent.weights = consensus_weights
             self.agent.trainer.actualizeModel(self.agent.weights)
-            self.agent.losses = codecs.encode(pickle.dumps(unpickled_neighbour_losses), "base64").decode()
+            #self.agent.losses = codecs.encode(pickle.dumps(unpickled_neighbour_losses), "base64").decode()
 
 
     async def run(self):
@@ -43,5 +43,5 @@ class ReceiveState(State):
         if not msg:
             self.set_next_state("TRAIN")
         else:
-            self.consensus(msg)
+            await self.consensus(msg)
             self.set_next_state("TRAIN")

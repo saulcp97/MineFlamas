@@ -43,6 +43,7 @@ class FederatedLearning:
         for epoch in range(epochs):
             running_loss = 0.0
             for i, data in enumerate(self.train_loader, 0):
+                
                 inputs, labels = data
                 self.optimizer.zero_grad()
 
@@ -55,7 +56,9 @@ class FederatedLearning:
                 # print every n mini-batches:
                 if mini_batches_to_print > 0 and i % mini_batches_to_print == mini_batches_to_print - 1:  
                     print(f"[{epoch + 1}, {i + 1}] loss: {running_loss / mini_batches_to_print}")
+                    t_losses += running_loss
                     running_loss = 0.0
             t_losses += running_loss
         self.losses = t_losses
         self.weight = self.model.state_dict()
+

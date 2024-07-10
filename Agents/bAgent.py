@@ -93,7 +93,7 @@ class MBAgent(Agent):
 
         
         state_machine_template = Template()
-        state_machine_template.set_metadata("conversation", "response_data")
+        state_machine_template.metadata = {"conversation": "pre_consensus_data"}
 
         self.add_behaviour(self.state_machine_behaviour, state_machine_template)
 

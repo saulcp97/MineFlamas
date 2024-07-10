@@ -5,6 +5,8 @@ import random
 import time
 import uuid
 import Config
+import codecs
+import pickle
 
 class SendState(State):
     def pick_agent(self, agents: list[str]):
@@ -14,20 +16,19 @@ class SendState(State):
     async def send_message(self, recipient):
         id = str(uuid.uuid4())
         msg = Message(to=recipient)
-
         msg.set_metadata("conversation", "pre_consensus_data")
-        msg.set_metadata("message_id", id)
+        #msg.set_metadata("message_id", id)
 
         local_weights = self.agent.weights
         local_losses = self.agent.losses
 
         if local_weights is not None or local_losses is not None:
-            msg_local_weights = str(local_weights).strip()
-            msg_local_losses = str(local_losses).strip()
+            msg_local_weights = codecs.encode(pickle.dumps(local_weights), "base64").decode()
+            msg_local_losses = codecs.encode(pickle.dumps(local_losses), "base64").decode()
             msg_max_order = str(round(self.agent.max_order, 3))
 
             content = msg_local_weights + "|" + msg_local_losses + "|" + msg_max_order
-
+            
             msg.body = content
             msg.set_metadata("timestamp", str(datetime.datetime.now()))
             await self.send(msg)

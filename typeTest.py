@@ -6,6 +6,7 @@ import codecs
 
 model = Architectures.ConvNet()
 
+
 text = codecs.encode(pickle.dumps(model.state_dict()), "base64").decode()
 print(text)
 

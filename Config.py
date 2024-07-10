@@ -29,6 +29,6 @@ MESSAGE_LOGGER = "MESSAGE_LOGGER"
 # 4 coalitions 1~3 members each coalition
 COALITION_PROBABILITY = 0.75
 
-#AGENT_NAMES = ["a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7"]
+AGENT_NAMES = ["scp_0", "scp_1", "scp_2", "scp_3", "scp_4", "scp_5"]
 
-AGENT_NAMES = ["a0", "a1"]
+#AGENT_NAMES = ["a0", "a1"]

@@ -8,6 +8,7 @@ class TrainState(State):
     async def train_local(self):
         self.start_time = time.monotonic()
         await self.agent.trainer.train()
+
         self.agent.losses = self.agent.trainer.losses
         self.agent.weights = self.agent.trainer.weight
         self.end_time = time.monotonic()
